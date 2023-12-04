@@ -1,60 +1,65 @@
 #include <stdio.h>
- // Structure to simulate accelerometer data
- typedef struct {
-     float x;
-     float y;
-     float z;
- } AccelerometerData;
-
- // Function to simulate obtaining accelerometer data
- void getAccelerometerData(AccelerometerData *data) {
-     // Simulated accelerometer data
-     data->x = 0x0000;  // Replace with actual accelerometer data retrieval
-     data->y = 0xFF80;
-     data->z = 0x013B;
- }
-
- // Function to simulate obtaining battery level
- float getBatteryLevel() {
-     // Simulated battery level
-     return 100.0;  // Replace with actual battery level retrieval
- }
-
- // Function to simulate obtaining MAC address
- void getMACAddress(char *macAddress) {
-     // Simulated MAC address
-     // Replace with actual MAC address retrieval
-     sprintf(macAddress, "12:34:56:78:90:00");
- }
-
- // Function to send beacon packets
- void sendBeaconPackets() {
-     // Simulate obtaining accelerometer data
-     AccelerometerData accelData;
-     getAccelerometerData(&accelData);
-
-     // Simulate obtaining battery level
-     float batteryLevel = getBatteryLevel();
-
-     // Simulate obtaining MAC address
-     char macAddress[18];  // MAC address is 12 hex digits + 5 colons + null terminator
-     getMACAddress(macAddress);
-
-     // Extracting information from the beacon packet
-     printf("Accelerometer Data: x=%0.2f, y=%0.2f, z=%0.2f\n", accelData.x, accelData.y, accelData.z);
-     printf("Battery Level: %.2f%%\n", batteryLevel);
-     printf("MAC Address: %s\n", macAddress);
-
-     // Check if the beacon is moving or not based on accelerometer data
-     if (accelData.x != 0.0 || accelData.y != 0.0 || accelData.z != 0.0) {
-         printf("Beacon is moving.\n");
-     } else {
-         printf("Beacon is not moving.\n");
-     }
- }
-
- int main() {
-     // Call the function to send beacon packets
-     sendBeaconPackets();
-     return 0;
- }
+#include <stdint.h>
+  // Define a structure for the accelerometer beacon frame
+     struct AccelerometerBeacon {
+       uint8_t datalength;  // datalength
+       uint8_t flagdatatype; //flag data type
+       uint8_t flagdata;     // flag data
+       uint8_t datalengthfield;  //data length field
+       uint8_t servicedata;  //service data
+      uint16_t uuid_data; //uuid_data
+      uint8_t frame_type;   // Type of frame (e.g., beacon)
+      uint8_t version;      // Version number of the sensor
+      uint16_t x_axis;         // X-axis acceleration
+      uint16_t y_axis;         // Y-axis acceleration
+       uint16_t z_axis;         // Z-axis acceleration
+      // Other information relevant to the accelerometer...
+  };
+  void getmacaddress(char *macaddress)
+  {
+  sprintf(macaddress,"12:34:56:78:90:00");
+  }
+  float getbatterylevel()
+  {
+  return 100.0;
+  }
+   int main() {
+      // Create an instance of the AccelerometerBeacon structure
+      struct AccelerometerBeacon accelerometer_beacon;
+      char macaddress[18];
+      getmacaddress(macaddress);
+      float batterylevel=getbatterylevel();
+      // Fill in the beacon information (hypothetical values)
+ // Fill in the beacon information (hypothetical values)
+ 
+      accelerometer_beacon.datalength = 0x02;   //Example datalength
+      accelerometer_beacon.flagdatatype= 0x01; //Example flag data type
+      accelerometer_beacon.flagdata = 0x06;     //Example flag data
+      accelerometer_beacon.datalengthfield = 0X12;  //Example data length field
+      accelerometer_beacon.servicedata = 0X16;     //Example service data
+     accelerometer_beacon.uuid_data = 0XE1FF;     // Example uuid data
+  //
+      accelerometer_beacon.frame_type = 0xA1;   // Example frame type for beacon
+      accelerometer_beacon.version = 0x03;     // Example version number
+      accelerometer_beacon.x_axis = 0X0000;     // Example X-axis acceleration
+      accelerometer_beacon.y_axis = 0XFF80;     // Example Y-axis acceleration
+      accelerometer_beacon.z_axis = 0X013B;     // Example Z-axis acceleration
+ 
+      // Printing the information
+      printf("Accelerometer Beacon Frame Information:\n");
+      printf("Data length: %d\n", accelerometer_beacon.datalength);
+      printf("Flag data type: %d\n", accelerometer_beacon.flagdatatype);
+      printf("Flag data: %d\n", accelerometer_beacon.flagdata);
+      printf("data length field: %d\n", accelerometer_beacon.datalengthfield);
+      printf("service data: %x\n", accelerometer_beacon.servicedata);
+      printf("UUID data: %x\n", accelerometer_beacon.uuid_data);
+      //
+      printf("Frame Type: %x\n", accelerometer_beacon.frame_type);
+      printf("Version: %d\n", accelerometer_beacon.version);
+      printf("Battery level: %.2f%%\n", batterylevel);
+      printf("X-axis Acceleration: %x\n", accelerometer_beacon.x_axis);
+      printf("Y-axis Acceleration: %x\n", accelerometer_beacon.y_axis);
+      printf("Z-axis Acceleration: %x\n", accelerometer_beacon.z_axis);
+      printf("MAC Address: %s\n", macaddress);
+      return 0;
+}
